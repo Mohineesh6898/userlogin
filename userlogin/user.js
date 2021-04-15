@@ -31,13 +31,44 @@ let back2 = document.getElementById("back2");
 let back3 = document.getElementById("back3");
 let back4 = document.getElementById("back4");
 let userList = document.getElementById("userList");
+let marks1 = document.getElementById("marks1");
+let marks2 = document.getElementById("marks2");
+let marks3 = document.getElementById("marks3");
+let Tenth = document.getElementById("10");
+let inter = document.getElementById("inter");
+let grad = document.getElementById("grad");
+let submit = document.getElementById("submit");
+submit.onclick = function () {};
+function validate(pass) {
+  if (pass.length < 8) {
+    return false;
+  } else {
+    let cap = false;
+    let sma = false;
+    let special = false;
+    let num = false;
+    for (let i in pass) {
+      if (pass.charCodeAt(i) >= 65 && pass.charCodeAt(i) < 91) {
+        cap = true;
+      } else if (pass.charCodeAt(i) >= 97 && pass.charCodeAt(i) < 123) {
+        sma = true;
+      } else if (pass.charCodeAt(i) >= 48 && pass.charCodeAt(i) < 58) {
+        num = true;
+      } else if (
+        (pass.charCodeAt(i) >= 33 && pass.charCodeAt(i) < 48) |
+        (pass.charCodeAt(i) >= 58 && pass.charCodeAt(i) < 65) |
+        (pass.charCodeAt(i) >= 91 && pass.charCodeAt(i) < 97) |
+        (pass.charCodeAt(i) >= 123 && pass.charCodeAt(i) < 127)
+      ) {
+        special = true;
+      }
+    }
 
-back4.onclick = () => {
-  login.classList.add("d-none");
-  register.classList.add("d-none");
-  admin.classList.add("d-none");
-  password.classList.add("d-none");
-  dashboard.classList.remove("d-none");
+    return special && num && cap && sma;
+  }
+}
+
+function reset() {
   email.value = "";
   password.value = "";
   password1.value = "";
@@ -50,6 +81,14 @@ back4.onclick = () => {
   confirmPassword1.value = "";
   confirmPassword.value = "";
   setPassword.value = "";
+}
+back4.onclick = () => {
+  login.classList.add("d-none");
+  register.classList.add("d-none");
+  admin.classList.add("d-none");
+  password.classList.add("d-none");
+  dashboard.classList.remove("d-none");
+  reset();
 };
 back1.onclick = () => {
   login.classList.remove("d-none");
@@ -57,18 +96,7 @@ back1.onclick = () => {
   admin.classList.add("d-none");
   password.classList.add("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  emailId.value = "";
-  password.value = "";
-  firstname.value = "";
-  password1.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 back2.onclick = () => {
   login.classList.add("d-none");
@@ -76,18 +104,7 @@ back2.onclick = () => {
   admin.classList.add("d-none");
   password.classList.add("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  password.value = "";
-  firstname.value = "";
-  password1.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  emailId.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 back3.onclick = () => {
   login.classList.remove("d-none");
@@ -96,70 +113,25 @@ back3.onclick = () => {
   changePassword.classList.add("d-none");
   password.classList.add("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  password1.value = "";
-  password.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  emailId.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 adminDash.onclick = () => {
   dashboard.classList.add("d-none");
   admin.classList.remove("d-none");
   login.classList.add("d-none");
-  // ul.textContent="";
-  email.value = "";
-  password.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  emailId.value = "";
-  password1.value = "";
-  number.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 Signout.onclick = () => {
   admin.classList.add("d-none");
   login.classList.remove("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  password1.value = "";
-  password.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailId.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 Signout1.onclick = () => {
   admin.classList.add("d-none");
   login.classList.remove("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  password.value = "";
-  password1.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  emailId.value = "";
-  number.value = "";
-  emailCreation.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
 let users;
 if (localStorage.getItem("users") === null) {
@@ -168,10 +140,9 @@ if (localStorage.getItem("users") === null) {
   users = JSON.parse(localStorage.getItem("users"));
 }
 count.textContent = users.length;
-// console.log(count)
 for (let i of users) {
   let li = document.createElement("li");
-  li.textContent = `${i.firstname} ${i.lastname}`;
+  li.textContent = `${i.firstname} ${i.lastname} ${i.email} ${i.number}`;
   userList.appendChild(li);
 }
 
@@ -191,24 +162,12 @@ signin.onclick = () => {
         if (i[email.value] === password1.value) {
           ans = false;
           callUser(i);
-          email.value = "";
-          password.value = "";
-          firstname.value = "";
-          lastname.value = "";
-          number.value = "";
-          emailId.value = "";
-          emailCreation.value = "";
-          password1.value = "";
-          setPassword1.value = "";
-          confirmPassword1.value = "";
-          confirmPassword.value = "";
-          setPassword.value = "";
+          reset();
           login.classList.add("d-none");
           dashboard.classList.remove("d-none");
         }
       }
     }
-
     if (ans === true) {
       alert("Invalid Email or password");
     }
@@ -220,18 +179,7 @@ newUser.addEventListener("click", function () {
   admin.classList.add("d-none");
   password.classList.add("d-none");
   dashboard.classList.add("d-none");
-  email.value = "";
-  password.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailId.value = "";
-  emailCreation.value = "";
-  password1.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 });
 createUser.addEventListener("click", function () {
   if (firstname.value === "") {
@@ -240,21 +188,39 @@ createUser.addEventListener("click", function () {
     alert("Lastname is required");
   } else if (number.value === "") {
     alert("Phone number is require");
+  } else if (number.value != "" && number.value.length != 10) {
+    alert("Enter a valid mobile number of 10 digits");
   } else if (emailCreation.value === "") {
     alert("Email is required");
   } else {
-    let ans = emailCreation.value;
-    user = {
-      firstname: firstname.value,
-      lastname: lastname.value,
-      number: number.value,
-    };
-    // console.log(user);
-    login.classList.add("d-none");
-    register.classList.add("d-none");
-    admin.classList.add("d-none");
-    password.classList.remove("d-none");
-    dashboard.classList.add("d-none");
+    let final = true;
+    let array = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    for (let i of number.value) {
+      if (!array.includes(i)) {
+        alert("Phone number should contain only numbers");
+        final = false;
+        break;
+      }
+    }
+    if (
+      !emailCreation.value.endsWith(".com") | !emailCreation.value.includes("@")
+    ) {
+      alert("Enter a valid email id");
+      final = false;
+    } else if (final) {
+      let ans = emailCreation.value;
+      user = {
+        firstname: firstname.value,
+        lastname: lastname.value,
+        number: number.value,
+        email: emailCreation.value,
+      };
+      login.classList.add("d-none");
+      register.classList.add("d-none");
+      admin.classList.add("d-none");
+      password.classList.remove("d-none");
+      dashboard.classList.add("d-none");
+    }
   }
 });
 confirm.onclick = () => {
@@ -266,16 +232,21 @@ confirm.onclick = () => {
     if (setPassword.value !== confirmPassword.value) {
       alert("Enter same password");
     } else {
-      user[emailCreation.value] = confirmPassword.value;
-      users.push(user);
-      count.textContent = users.length;
-      let li = document.createElement("li");
-      li.textContent = `${user.firstname} ${user.lastname}`;
-      userList.appendChild(li);
-      login.classList.remove("d-none");
-      callUser(user);
-      password.classList.add("d-none");
-      localStorage.setItem("users", JSON.stringify(users));
+      let ans = validate(setPassword.value);
+      if (ans) {
+        user[emailCreation.value] = confirmPassword.value;
+        users.push(user);
+        count.textContent = users.length;
+        let li = document.createElement("li");
+        li.textContent = `${user.firstname} ${user.lastname} ${user.email} ${user.number}`;
+        userList.appendChild(li);
+        login.classList.remove("d-none");
+        callUser(user);
+        password.classList.add("d-none");
+        localStorage.setItem("users", JSON.stringify(users));
+      } else {
+        alert("Enter a strong password");
+      }
     }
   }
 };
@@ -291,18 +262,22 @@ confirmChange.onclick = () => {
       alert("Enter same password");
     } else {
       let ans = emailId.value;
+      let a = validate(setPassword1.value);
       let abc = true;
-      for (let i of users) {
-        if (i[ans] != undefined) {
-          i[ans] = confirmPassword1.value;
-          abc = false;
-          localStorage.setItem("users", JSON.stringify(users));
-          changePassword.classList.add("d-none");
-          login.classList.remove("d-none");
-          callUser(i);
-
-          break;
+      if (a) {
+        for (let i of users) {
+          if (i[ans] != undefined) {
+            i[ans] = confirmPassword1.value;
+            abc = false;
+            localStorage.setItem("users", JSON.stringify(users));
+            changePassword.classList.add("d-none");
+            login.classList.remove("d-none");
+            callUser(i);
+            break;
+          }
         }
+      } else {
+        alert("Enter a strong password");
       }
       if (abc) {
         alert("Enter Valid Emaild");
@@ -313,17 +288,5 @@ confirmChange.onclick = () => {
 forgot.onclick = function () {
   login.classList.add("d-none");
   changePassword.classList.remove("d-none");
-
-  email.value = "";
-  password.value = "";
-  firstname.value = "";
-  lastname.value = "";
-  number.value = "";
-  emailId.value = "";
-  emailCreation.value = "";
-  password1.value = "";
-  setPassword1.value = "";
-  confirmPassword1.value = "";
-  confirmPassword.value = "";
-  setPassword.value = "";
+  reset();
 };
